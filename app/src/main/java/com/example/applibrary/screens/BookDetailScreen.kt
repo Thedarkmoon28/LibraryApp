@@ -1,263 +1,211 @@
 package com.example.applibrary.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Headset
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.applibrary.books
+import com.example.applibrary.ui.theme.AccentYellow
+import com.example.applibrary.ui.theme.BackgroundLight
+import com.example.applibrary.ui.theme.HeaderGreen
 
 @Composable
 fun BookDetailScreen(
     id: Int
-){
-
-    val colors = MaterialTheme.colorScheme
-    val typography = MaterialTheme.typography
-    //EMULAR PETICION A API
-    val book = books.firstOrNull{ b -> b.id == id}
-
+) {
+    val book = books.firstOrNull { b -> b.id == id }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .background(colors.background)
-    ){
-
-        //Imagen e información
-        Column(
+            .background(BackgroundLight)
+    ) {
+        // Cabecera Verde con curva (idéntica a la imagen)
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(400.dp)
-                .clip(RoundedCornerShape(bottomStart = 75.dp))
-                .background(colors.primary)
-                //.padding(innerPadding)
-                .padding(15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        )
-        {
-            AsyncImage(
-                model = book?.imageUrl ?: "",
-                contentDescription = book?.title ?: "Sin titulo",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .width(150.dp)
-                    .height(250.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(colors.secondary)
-            )
-
+                .height(380.dp)
+                .clip(RoundedCornerShape(bottomEnd = 80.dp))
+                .background(HeaderGreen)
+        ) {
             Column(
                 modifier = Modifier
-                    .padding(top = 10.dp),
+                    .fillMaxSize()
+                    .padding(top = 40.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
-            )
-            {
+            ) {
+                // Portada del libro con sombra
+                AsyncImage(
+                    model = book?.imageUrl ?: "",
+                    contentDescription = book?.title ?: "",
+                    modifier = Modifier
+                        .height(240.dp)
+                        .width(160.dp)
+                        .shadow(12.dp, RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentScale = ContentScale.Crop
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Título y Autor
                 Text(
-                    text = book?.title ?: "Sin titulo",
-                    style = typography.titleMedium,
-                    color = colors.onPrimary
+                    text = book?.title ?: "",
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
+
                 Text(
-                    text = book?.author ?: "Sin descripcion",
-                    color = colors.onPrimary
+                    text = book?.author ?: "",
+                    fontSize = 16.sp,
+                    color = Color.White.copy(alpha = 0.9f)
                 )
-            }
-
-            //Info del libro
-            Row(
-                modifier = Modifier
-                    .padding(top = 10.dp),
-                horizontalArrangement = Arrangement.Center
-            )
-            {
-                //Rating
-                Column(
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(colors.onPrimary)
-                        .padding(horizontal = 15.dp, vertical = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                )
-                {
-                    Text(
-                        text = "RATING",
-                        fontWeight = FontWeight.Bold,
-                        style = typography.labelSmall,
-                        color = colors.primary
-                    )
-                    Text(
-                        text = book?.rating.toString() ?: "Sin rating",
-                        style = typography.bodyMedium,
-                        color = colors.primary
-                    )
-                }
-
-                //PAGINAS
-                Column(
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(colors.onPrimary)
-                        .padding(horizontal = 15.dp, vertical = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                )
-                {
-                    Text(
-                        text = "PAG",
-                        fontWeight = FontWeight.Bold,
-                        style = typography.labelSmall,
-                        color = colors.primary
-                    )
-                    Text(
-                        text = book?.pages ?: "Sin rating",
-                        style = typography.bodyMedium,
-                        color = colors.primary
-                    )
-                }
-
-                //Audio
-                Column(
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(colors.onPrimary)
-                        .padding(horizontal = 15.dp, vertical = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                )
-                {
-                    Text(
-                        text = "AUDIO",
-                        fontWeight = FontWeight.Bold,
-                        style = typography.labelSmall,
-                        color = colors.primary
-                    )
-                    Text(
-                        text = book?.audio ?: "Sin rating",
-                        style = typography.bodyMedium,
-                        color = colors.primary
-                    )
-                }
-
-                //LENG
-                Column(
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(colors.onPrimary)
-                        .padding(horizontal = 15.dp, vertical = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                )
-                {
-                    Text(
-                        text = "LENG",
-                        fontWeight = FontWeight.Bold,
-                        style = typography.labelSmall,
-                        color = colors.primary
-                    )
-                    Text(
-                        text = book?.language ?: "Sin rating",
-                        style = typography.bodyMedium,
-                        color = colors.primary
-                    )
-                }
-
             }
         }
 
-        //Row de leerAhora
+        // Fila de Estadísticas (Chips blancos con sombra)
         Row(
             modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 20.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            StatItem(label = "RATING", value = book?.rating.toString())
+            StatItem(label = "PAG", value = book?.pages ?: "")
+            StatItem(label = "AUDIO", value = book?.audio ?: "")
+            StatItem(label = "LENG", value = book?.language?.take(3)?.uppercase() ?: "INC")
+        }
+
+        // Botones de Acción (Amarillo Accent)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
             verticalAlignment = Alignment.CenterVertically
-        )
-        {
+        ) {
             Button(
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colors.secondary,
-                    contentColor = colors.onSecondary
-                ),
+                onClick = { },
                 modifier = Modifier
-                    .height(45.dp)
-                    .weight(3f)
-                    .padding(start = 10.dp, end = 10.dp)
-                ) {
+                    .weight(1f)
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = AccentYellow),
+                shape = RoundedCornerShape(25.dp)
+            ) {
                 Text(
-                    text = "Leer Ahora",
-                    color = colors.onPrimary
+                    text = "Leer ahora",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
                 )
             }
 
+            Spacer(modifier = Modifier.width(16.dp))
 
             IconButton(
                 onClick = { },
                 modifier = Modifier
-                    .clip(CircleShape)
-                    .background(colors.secondary)
-                    .size(35.dp)
-
+                    .size(50.dp)
+                    .background(AccentYellow, CircleShape)
             ) {
                 Icon(
                     imageVector = Icons.Default.Headset,
-                    contentDescription = "Search",
-                    tint = colors.onPrimary
+                    contentDescription = "Audio",
+                    tint = Color.White
                 )
             }
         }
 
-        //Sección extra
+        // Descripción
         Column(
             modifier = Modifier
-                .padding(start = 10.dp,end = 10.dp)
+                .fillMaxWidth()
+                .padding(24.dp)
         ) {
             Text(
-                text = "Descripcion",
+                text = "Descripción",
                 fontWeight = FontWeight.Bold,
-                style = typography.titleLarge,
+                fontSize = 18.sp,
+                color = Color.Black
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = book?.description ?: "Sin Descripción",
-                style = typography.bodyLarge,
+                text = book?.description ?: "",
+                fontSize = 15.sp,
+                color = Color.Black.copy(alpha = 0.8f),
+                lineHeight = 22.sp
             )
         }
 
+        Spacer(modifier = Modifier.weight(1f))
+
+        // Barra de navegación inferior
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
+            color = Color.White,
+            shadowElevation = 15.dp
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 20.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(Icons.Default.Menu, contentDescription = null, tint = AccentYellow, modifier = Modifier.size(28.dp))
+                Icon(Icons.Default.Favorite, contentDescription = null, tint = AccentYellow, modifier = Modifier.size(28.dp))
+            }
+        }
     }
 }
 
-
-@Preview
 @Composable
-fun BookDetailScreenPreview(){
+fun RowScope.StatItem(label: String, value: String) {
+    Column(
+        modifier = Modifier
+            .weight(1f)
+            .shadow(2.dp, RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color.White)
+            .padding(vertical = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = label,
+            fontSize = 10.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = Color.DarkGray
+        )
+        Text(
+            text = value,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.Black
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun BookDetailScreenPreview() {
     BookDetailScreen(1)
 }
